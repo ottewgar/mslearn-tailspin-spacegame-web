@@ -16,7 +16,7 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayname: 'Use .NET Core SDK 3.1.100'
+  displayName: 'Use .NET Core SDK 3.1.100'
   inputs:
     packageType: sdk
     version: 3.1.100
@@ -27,13 +27,13 @@ steps:
     verbose: false
     
 - script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
-  displayname: 'Compile Sass assets'
+  displayName: 'Compile Sass assets'
 
 - task: gulp@1
   displayName: 'Run gulp tasks'
 
 - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
-  displayname: 'Write build info'
+  displayName: 'Write build info'
   workingDirectory: Tailspin.SpaceGame.Web/wwwroot
 
 - task: DotNetCoreCLI@2
