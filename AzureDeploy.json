@@ -7,10 +7,6 @@
      "minLength": 3,
      "maxLength": 11
    },
-    "GmloAppServicePlanName": {
-      "defaultValue": "GmloAppServicePlan",
-      "type": "String"
-  },
    "storageSKU": {
      "type": "string",
      "defaultValue": "Standard_LRS",
@@ -28,6 +24,10 @@
    "location": {
      "type": "string",
      "defaultValue": "[resourceGroup().location]"
+   },
+   "GmloAppServicePlanName": {
+     "type": "string",
+     "defaultValue": "GmloAppServicePlan"
    }
  },
  "variables": {
@@ -45,30 +45,27 @@
      "kind": "StorageV2",
      "properties": {
        "supportsHttpsTrafficOnly": true
+     }
+   },
+   {
+     "type": "Microsoft.Web/serverfarms",
+     "apiVersion": "2018-02-01",
+     "name": "[parameters('GmloAppServicePlanName')]",
+     "location": "[parameters('location')]",
+     "sku": {
+       "name": "B1",
+       "tier": "Basic",
+       "size": "B1",
+       "family": "B",
+       "capacity": 1
      },
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2018-02-01",
-      "name": "[parameters('GmloAppServicePlanName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-          "name": "B1",
-          "tier": "Basic",
-          "size": "B1",
-          "family": "B",
-          "capacity": 1
-      },
-      "kind": "linux",
-      "properties": {
-          "perSiteScaling": false,
-          "maximumElasticWorkerCount": 1,
-          "isSpot": false,
-          "freeOfferExpirationTime": "2020-05-10T12:02:25.18",
-          "reserved": true,
-          "isXenon": false,
-          "hyperV": false,
-          "targetWorkerCount": 0,
-          "targetWorkerSizeId": 0
-      }
+     "kind": "linux",
+     "properties": {
+       "perSiteScaling": false,
+       "reserved": true,
+       "targetWorkerCount": 0,
+       "targetWorkerSizeId": 0
+     }
    }
  ],
  "outputs": {
