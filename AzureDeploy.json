@@ -28,11 +28,27 @@
    "GmloAppServicePlanName": {
      "type": "string",
      "defaultValue": "GmloAppServicePlan"
-   }
+   },
+   "webAppName": {
+      "type": "string",
+      "defaultValue" : "AzureLinuxApp",
+      "metadata": {
+        "description": "Base name of the resource such as web app name and app service plan "
+      },
+      "minLength": 2
+    },
+    "linuxFxVersion" : {
+      "type": "string",
+      "defaultValue" : "php|7.0",
+      "metadata": {
+      "description": "The Runtime stack of current web app"
+        }
+    }
  },
  "variables": {
-   "uniqueStorageName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id))]"
- },
+   "uniqueStorageName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id))]",
+   "webAppPortalName": "[concat(parameters('webAppName'), uniqueString(resourceGroup().id))]"
+  },
  "resources": [
    {
      "type": "Microsoft.Storage/storageAccounts",
@@ -70,6 +86,20 @@
           "hyperV": false,
           "targetWorkerCount": 0,
           "targetWorkerSizeId": 0
+      },
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[variables('webAppPortalName')]",
+      "location": "[parameters('location')]",
+      "kind": "app",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('GmloAppServicePlanName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('GmloAppServicePlanName'))]",
+        "siteConfig": {
+            "linuxFxVersion": "[parameters('linuxFxVersion')]"
+          }
       }
    }
  ],
